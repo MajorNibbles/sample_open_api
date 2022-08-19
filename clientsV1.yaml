@@ -3,8 +3,13 @@ info:
     version: '1'
     title: Clients
     description: Provides RESTful services for Clients across your Tenant
+servers:
+    - url: https://whitelabel.us.bitestream.co/api/v1
+      description: Production server (uses live data)
+    - url: https://whitelabel.pre.stream.bite.dev/api/v1
+      description: Sandbox server (uses test data)
 paths:
-    /:
+    /clients:
         summary: Provides RESTful services for Clients (LP Only)
         get:
             summary: Returns all Clients for a tenant
@@ -47,7 +52,7 @@ paths:
                         "*/*":
                             schema:
                                 "$ref": "#/components/schemas/ClientDTO"
-    /{clientId}:
+    /clients/{clientId}:
         summary: Provides RESTful services for specified Clients (LP Only)
         get:
             summary: Returns the specified Client
