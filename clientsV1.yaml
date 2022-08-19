@@ -4,7 +4,7 @@ info:
     title: Clients
     description: Provides RESTful services for Clients across your Tenant
 paths:
-    /:
+    /clients:
         summary: Provides RESTful services for Clients (LP Only)
         get:
             summary: Returns all Clients for a tenant
@@ -47,7 +47,7 @@ paths:
                         "*/*":
                             schema:
                                 "$ref": "#/components/schemas/ClientDTO"
-    /{clientId}:
+    /clients/{clientId}:
         summary: Provides RESTful services for specified Clients (LP Only)
         get:
             summary: Returns the specified Client
