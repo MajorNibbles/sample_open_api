@@ -4,10 +4,10 @@ info:
     title: Clients
     description: Provides RESTful services for Clients across your Tenant
 servers:
-    - url: https://whitelabel.us.bitestream.co/api/v1
-      description: Production server (uses live data)
     - url: https://whitelabel.sand.stream.bite.dev/api/v1
       description: Sandbox server (uses test data)
+    - url: https://whitelabel.us.bitestream.co/api/v1
+      description: Production server (uses live data)
 paths:
   /clients:
     summary: Provides RESTful services for Clients
