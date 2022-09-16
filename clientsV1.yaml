@@ -9,200 +9,239 @@ servers:
     - url: https://whitelabel.pre.stream.bite.dev/api/v1
       description: Sandbox server (uses test data)
 paths:
-    /clients:
-        summary: Provides RESTful services for Clients (LP Only)
-        get:
-            summary: Returns all Clients for a tenant
-            tags:
-                - client-controller
-            operationId: /clients
-            parameters:
-                - in: header
-                  name: tenant-id
-                  description: Tenant ID. Automatically populated, no need to send with request
-                  required: true
-                  schema:
-                      type: integer
-                      format: int64
-                      example: 123456789000
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        "*/*":
-                            schema:
-                                type: array
-                                items:
-                                    $ref: "#/components/schemas/ClientDTO"
-        post:
-            summary: Creates a new Client object for the tenant
-            tags:
-            - client-controller
-            operationId: postClient
-            requestBody:
-                content:
-                    application/json:
-                        schema:
-                            "$ref": "#/components/schemas/ClientDTO"
-                required: true
-            responses:
-                '201':
-                    description: OK
-                    content:
-                        "*/*":
-                            schema:
-                                "$ref": "#/components/schemas/ClientDTO"
-    /clients/{clientId}:
-        summary: Provides RESTful services for specified Clients (LP Only)
-        get:
-            summary: Returns the specified Client
-            tags:
-                - client-controller
-            operationId: /clients/{clientId}
-            parameters:
-                - in: header
-                  name: tenant-id
-                  required: true
-                  schema:
-                      type: integer
-                      format: int64
-                      example: 123456789000
-                  description: Tenant ID. Automatically populated, no need to send with request
-                - name: clientId
-                  description: Related client ID
-                  in: path
-                  required: true
-                  schema:
-                      type: integer
-                      format: int64
-                      example: 123456789000
-            responses:
-                "200":
-                    description: OK
-                    content:
-                        "*/*":
-                            schema:
-                                type: array
-                                items:
-                                    $ref: "#/components/schemas/ClientDTO"
-                "404":
-                    description: Client not found
-        delete:
-            summary: Removes the specified Client
-            tags:
-                - client-controller
-            operationId: deleteClient
-            parameters:
-                - name: clientId
-                  description: Related client ID
-                  in: path
-                  required: true
-                  schema:
-                    type: integer
-                    format: int64
-                    example: 123456789000
-            responses:
-                '200':
-                    description: OK
-                    content:
-                        "*/*":
-                            schema:
-                                type: string
+  /clients:
+    summary: Provides RESTful services for Clients
+    get:
+      summary: Returns all Clients for the current tenant
+      tags:
+        - client-controller
+      operationId: getAllClients
+      parameters:
+        - name: tenantId
+          description: 'Tenant ID. Automatically populated, no need to send with request'
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 123456789000
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ClientResponseDTO'
+    post:
+      summary: Creates a new Client object for the tenant
+      tags:
+        - client-controller
+      operationId: postClient
+      parameters:
+        - name: tenantId
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 123456789000
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientRequestDTO'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ClientResponseDTO'
+  '/clients/{clientId}':
+    summary: Provides RESTful services for specified Clients
+    get:
+      summary: Returns the specified Client
+      tags:
+        - client-controller
+      operationId: getClient
+      parameters:
+        - name: clientId
+          description: Related client ID
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 123456789000
+        - name: tenantId
+          description: 'Tenant ID. Automatically populated, no need to send with request'
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 123456789000
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ClientResponseDTO'
+    put:
+      summary: Updates the specified Client
+      tags:
+        - client-controller
+      operationId: putClient
+      parameters:
+        - name: clientId
+          description: Related client ID
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 123456789000
+        - name: tenantId
+          description: 'Tenant ID. Automatically populated, no need to send with request'
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 123456789000
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ClientRequestDTO'
+        required: true
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                $ref: '#/components/schemas/ClientResponseDTO'
+    delete:
+      summary: Deletes the specified Client
+      tags:
+        - client-controller
+      operationId: deleteClient
+      parameters:
+        - name: clientId
+          description: Related client ID
+          in: path
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 123456789000
+        - name: tenantId
+          description: 'Tenant ID. Automatically populated, no need to send with request'
+          in: query
+          required: true
+          schema:
+            type: integer
+            format: int64
+            example: 123456789000
+      responses:
+        '200':
+          description: OK
+          content:
+            '*/*':
+              schema:
+                type: string
 components:
-    schemas:
-        ClientDTO:
-            type: object
-            properties:
-                id:
-                    description: Client ID
-                    type: integer
-                    format: int64
-                    example: 123456789000
-                email:
-                    description: Email of Client
-                    type: string
-                firstName:
-                    description: First name of Client
-                    type: string
-                lastName:
-                    description: Last name of Client
-                    type: string
-                avatar:
-                    description: Avatar
-                    type: string
-                phone:
-                    description: Phone Number of Client
-                    type: string
-                status:
-                    description: Status of Client
-                    type: string
-                    example: normal
-                centralAccount:
-                    description: Deprecated
-                    type: integer
-                    format: int32
-                    example: N/A
-                centralAccountId:
-                    description: Deprecated
-                    type: integer
-                    format: int64
-                    example: 123456789000
-                tenantId:
-                    description: Tenant ID of Client
-                    type: integer
-                    format: int64
-                    example: 123456789000
-                dataCreateTime:
-                    description: Date of creation
-                    type: string
-                    format: date-time
-                    example: 2022-06-25 12:30:00
-                dataUpdateTime:
-                    description: Date of last update
-                    type: string
-                    format: date-time
-                    example: 2022-06-25 12:30:00
-                dataIsDeleted:
-                    description: Bool (0/1)
-                    type: integer
-                    format: int32
-                    example: 0
-                dataStatus:
-                    description: Data Status
-                    type: string
-                    example: valid
-                countryAlpha2Code:
-                    description: Country code (2 character)
-                    type: string
-                    example: GB
-                role:
-                    description: Deprecated
-                    type: string
-                position:
-                    description: Deprecated
-                    type: string
-                areaCode:
-                    description: Phone number area code
-                    type: string
-                    example: 44
-                phoneCurrencyCode:
-                    description: Country code (2 character)
-                    type: string
-                    example: GB
-                timeZone:
-                    description: UTC offset of Time Zone
-                    type: integer
-                    format: int32
-                    example: -2
-                timeZoneText:
-                    description: Time zone name
-                    type: string
-                    example: Brazil/DeNoronha
-                language:
-                    description: Language code
-                    type: string
-                    example: en
-                currencyCode:
-                    description: Currency code (3 character)
-                    type: string
-                    example: GBP
+  schemas:
+    ClientRequestDTO:
+      required:
+        - diallingCountryCode
+        - email
+        - firstName
+        - lastName
+        - phone
+        - residencyCountryCode
+      type: object
+      properties:
+        email:
+          description: Email of Client
+          type: string
+        firstName:
+          description: First name of Client
+          type: string
+        lastName:
+          description: Last name of Client
+          type: string
+        phone:
+          description: Phone Number of Client
+          type: string
+          example: 123456789
+        residencyCountryCode:
+          description: Country code (2 character)
+          type: string
+          example: GB
+        diallingCode:
+          description: Phones national dialling code
+          type: string
+          example: 44
+        diallingCountryCode:
+          description: Country code (2 character) of Phones national dialling code
+          type: string
+          example: GB
+        gmtOffset:
+          description: GMT offset of Time Zone
+          type: integer
+          format: int32
+          example: -2
+        timezoneArea:
+          description: Time zone name
+          type: string
+          example: Brazil/DeNoronha
+        languageCode:
+          type: string
+          example: en
+        currencyCode:
+          description: Currency code (3 character)
+          type: string
+          example: GBP
+    ClientResponseDTO:
+      allOf:
+        - $ref: '#/components/schemas/ClientRequestDTO'
+      required:
+        - diallingCountryCode
+        - email
+        - firstName
+        - lastName
+        - phone
+        - residencyCountryCode
+      type: object
+      properties:
+        id:
+          description: Client ID
+          type: integer
+          format: int64
+        tenantId:
+          description: Tenant ID
+          type: integer
+          format: int64
+        accountType:
+          description: Account type (Member for clients)
+          type: string
+        verificationStatus:
+          type: string
+        createdDateTime:
+          description: Timestamp of creation
+          type: string
+          format: date-time
+        updatedDateTime:
+          description: Timestamp of latest update
+          type: string
+          format: date-time
+        logicallyDeleted:
+          description: 'Flag signifying if client is deleted (0=active, 1=inactive)'
+          type: integer
+          format: int32
