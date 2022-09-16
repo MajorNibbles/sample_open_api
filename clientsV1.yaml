@@ -1,12 +1,12 @@
 openapi: 3.0.1
 info:
-    version: '1'
+    version: 'v1'
     title: Clients
     description: Provides RESTful services for Clients across your Tenant
 servers:
     - url: https://whitelabel.us.bitestream.co/api/v1
       description: Production server (uses live data)
-    - url: https://whitelabel.pre.stream.bite.dev/api/v1
+    - url: https://whitelabel.sand.stream.bite.dev/api/v1
       description: Sandbox server (uses test data)
 paths:
   /clients:
